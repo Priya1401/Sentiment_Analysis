@@ -55,5 +55,4 @@ def index():
     return render_template("index.html", prediction=prediction)
 
 if __name__ == "__main__":
-    # For development purposes; in production, use a proper WSGI server
     app.run(debug=True, host="0.0.0.0", port=5000)
