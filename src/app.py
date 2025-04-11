@@ -32,7 +32,7 @@ if not os.path.exists(TOKENIZER_PATH):
     raise FileNotFoundError(f"Tokenizer file not found at {TOKENIZER_PATH}")
 
 # Load the model and tokenizer
-model = load_model(MODEL_PATH)
+model = load_model(MODEL_PATH, compile=False)
 with open(TOKENIZER_PATH, "rb") as f:
     tokenizer = pickle.load(f)
 
