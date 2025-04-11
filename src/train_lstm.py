@@ -16,6 +16,7 @@ import re
 import pickle
 import pandas as pd
 import numpy as np
+import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
@@ -34,7 +35,7 @@ MAX_VOCAB = 10000         # Maximum number of words in the vocabulary
 MAX_LEN = 100             # Maximum length (number of tokens) for each tweet
 EMBED_DIM = 128           # Dimension of the embedding vectors
 BATCH_SIZE = 64
-EPOCHS = 15               # Increase epochs; early stopping and callbacks will keep overfitting in check
+EPOCHS = 1               # Increase epochs; early stopping and callbacks will keep overfitting in check
 L2_REG = 1e-4             # L2 regularization factor for the embedding layer
 
 # -------------------
