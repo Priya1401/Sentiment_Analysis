@@ -74,14 +74,14 @@
     <h1>Tweet Sentiment Analyzer</h1>
     <form method="POST">
       <input type="text" name="tweet" placeholder="Enter a tweet..." required>
-      <!-- New select element for model choice -->
+      <!-- Updated select element for model choice with Jinja conditions -->
       <select name="model_choice" required>
-        <option value="LSTM">LSTM</option>
-        <option value="BERT">BERT</option>
+        <option value="LSTM" {% if model_choice =="LSTM" %}selected{% endif %}>LSTM</option>
+        <option value="BERT" {% if model_choice =="BERT" %}selected{% endif %}>BERT</option>
       </select>
       <button type="submit">Analyze</button>
     </form>
-    {% if prediction %}
+    {% if prediction is not none %}
       <div class="result">{{ prediction }}</div>
     {% endif %}
   </div>

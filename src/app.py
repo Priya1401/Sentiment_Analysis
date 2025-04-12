@@ -1,50 +1,45 @@
 import os
-import pickle
+
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.sequence import pad_sequences
 from flask import Flask, render_template, request
 
-# Global constants
-MAX_LEN = 100
-labels = ["Negative", "Neutral", "Positive"]  # Order matches label encoding: 0=Negative, 1=Neutral, 2=Positive
+# Import BERT model, tokenizer, and preprocessing function
+# from load_bert import bert_model, bert_tokenizer, preprocess_bert
+
+# Import LSTM model and preprocessing function
+from load_lstm import lstm_model, preprocess_lstm
+
+# Define sentiment labels
+LABELS = ["Negative", "Neutral", "Positive"]
 
 # Create the Flask app
 app = Flask(__name__)
 
-# Set the paths for the model and tokenizer
-MODEL_PATH = os.path.join("flask_sentiment_app", "model", "lstm_model.keras")  # Directory for SavedModel
-TOKENIZER_PATH = os.path.join("flask_sentiment_app", "model", "tokenizer.pkl")
-
-# Verify the directories and files exist
-if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError(f"Model directory not found at {MODEL_PATH}")
-if not os.path.exists(TOKENIZER_PATH):
-    raise FileNotFoundError(f"Tokenizer file not found at {TOKENIZER_PATH}")
-
-# Load the model and tokenizer
-model = load_model(MODEL_PATH)
-with open(TOKENIZER_PATH, "rb") as f:
-    tokenizer = pickle.load(f)
-
-def preprocess_text(text: str):
-    """Convert text to padded sequences using the loaded tokenizer."""
-    seq = tokenizer.texts_to_sequences([text])
-    padded = pad_sequences(seq, maxlen=MAX_LEN, padding="post", truncating="post")
-    return padded
-
 @app.route("/", methods=["GET", "POST"])
 def index():
     prediction = None
+    model_choice = "LSTM"  # default
     if request.method == "POST":
         tweet = request.form.get("tweet", "").strip()
+        model_choice = request.form.get("model_choice", "LSTM")  # Capture user's selection
         if tweet:
-            processed = preprocess_text(tweet)
-            pred = model.predict(processed)
-            sentiment_idx = np.argmax(pred)
-            prediction = f"Predicted Sentiment: {labels[sentiment_idx]}"
-    return render_template("index.html", prediction=prediction)
+            if model_choice == "LSTM":
+                processed_input = preprocess_lstm(tweet)
+                pred = lstm_model.predict(processed_input)
+                sentiment_idx = np.argmax(pred)
+            elif model_choice == "BERT":
+                from load_bert import bert_model, bert_tokenizer, preprocess_bert
+                input_ids, attention_mask = preprocess_bert(tweet)
+                pred = bert_model.predict([input_ids, attention_mask])
+                # Adjust indexing if using logits:
+                sentiment_idx = np.argmax(pred.logits) if hasattr(pred, "logits") else np.argmax(pred)
+            # You might further map the index to the actual sentiment label here if desired.
+            prediction = f"Predicted Sentiment: {LABELS[sentiment_idx]}"
+
+    # Pass the model_choice back to the template so the form remembers the user's selection.
+    return render_template("index.html", prediction=prediction, model_choice=model_choice)
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
