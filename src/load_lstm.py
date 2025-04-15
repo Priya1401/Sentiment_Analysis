@@ -4,8 +4,8 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # Define paths to your LSTM model and tokenizer
-LSTM_MODEL_PATH = os.path.join("flask_sentiment_app", "model", "lstm_model.keras")
-LSTM_TOKENIZER_PATH = os.path.join("flask_sentiment_app", "model", "tokenizer.pkl")
+LSTM_MODEL_PATH = os.path.join("flask_sentiment_app", "model", "lstm","lstm_model.keras")
+LSTM_TOKENIZER_PATH = os.path.join("flask_sentiment_app", "model","lstm", "tokenizer.pkl")
 
 # Load the LSTM model
 lstm_model = load_model(LSTM_MODEL_PATH)
