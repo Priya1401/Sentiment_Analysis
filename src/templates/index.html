@@ -122,11 +122,11 @@
       <form method="POST">
         <input type="text" name="tweet" placeholder="Enter a tweet..." required>
         <select name="model_choice" required>
-          <option value="LSTM" {% if model_choice == "LSTM" %}selected{% endif %}>LSTM</option>
-          <option value="BERT" {% if model_choice == "BERT" %}selected{% endif %}>BERT</option>
-          <option value="Logistic" {% if model_choice == "Logistic" %}selected{% endif %}>Logistic Regression</option>
-          <option value="RandomForest" {% if model_choice == "RandomForest" %}selected{% endif %}>Random Forest</option>
-          <option value="SVM" {% if model_choice == "SVM" %}selected{% endif %}>SVM</option>
+          <option value="LSTM" {% if model_choice =="LSTM" %}selected{% endif %}>LSTM</option>
+          <option value="BERT" {% if model_choice =="BERT" %}selected{% endif %}>BERT</option>
+          <option value="Logistic" {% if model_choice =="Logistic" %}selected{% endif %}>Logistic Regression</option>
+          <option value="RandomForest" {% if model_choice =="RandomForest" %}selected{% endif %}>Random Forest</option>
+          <option value="SVM" {% if model_choice =="SVM" %}selected{% endif %}>SVM</option>
         </select>
         <button type="submit">Analyze</button>
       </form>
